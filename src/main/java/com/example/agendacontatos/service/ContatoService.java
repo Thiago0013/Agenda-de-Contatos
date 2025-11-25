@@ -1,6 +1,8 @@
 package com.example.agendacontatos.service;
 
 import com.example.agendacontatos.dto.ContatoDTO;
+import com.example.agendacontatos.exception.ContatoJaExisteException;
+import com.example.agendacontatos.exception.UsuarioNaoEncontradoException;
 import com.example.agendacontatos.model.Contato;
 import com.example.agendacontatos.model.Usuario;
 import com.example.agendacontatos.repository.ContatoRepository;
@@ -20,10 +22,14 @@ public class ContatoService {
     }
 
     public Contato criar(ContatoDTO dto){
-        Usuario usuario = userRepository.findById(dto.idUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if(contatoRepository.existsByUsuario_IdAndTelefone(dto.idUsuario(), dto.telefone())){
+            throw new ContatoJaExisteException("Este contato já pertence a esse usuario");
+        }
 
-        Contato contato = new Contato(dto.nome(), dto.email(), dto.numero(), usuario);
+        Usuario usuario = userRepository.findById(dto.idUsuario())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
+
+        Contato contato = new Contato(dto.nome(), dto.email(), dto.telefone(), usuario);
         return contatoRepository.save(contato);
     }
 
