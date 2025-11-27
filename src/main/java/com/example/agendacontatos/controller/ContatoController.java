@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/contato")
 public class ContatoController {
     private final ContatoService service;
 
@@ -16,12 +16,12 @@ public class ContatoController {
         this.service = service;
     }
 
-    @PostMapping("/contato")
+    @PostMapping
     public Contato contato(@RequestBody ContatoDTO contato){
         return service.criar(contato);
     }
 
-    @GetMapping("/contato")
+    @GetMapping
     public List<Contato> contato(){
         return service.listar();
     }
