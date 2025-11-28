@@ -34,4 +34,16 @@ public class GlobalExceptionHandler {
                         "timestamp", LocalDateTime.now()
                 ));
     }
+
+    @ExceptionHandler(UsuarioJaExisteException.class)
+    public ResponseEntity<?> handleUsuarioJaExiste(UsuarioJaExisteException ex) {
+
+        return ResponseEntity
+                .status(409)
+                .body(Map.of(
+                        "erro", ex.getMessage(),
+                        "status", 409,
+                        "timestamp", LocalDateTime.now()
+                ));
+    }
 }
